@@ -3,6 +3,7 @@
   import { tweened } from "svelte/motion";
   import { cubicIn } from "svelte/easing";
   import { fade, fly, slide, scale } from "svelte/transition";
+  import { flip } from "svelte/animate";
   import Spring from "./Spring.svelte";
 
   let boxInput;
@@ -21,7 +22,7 @@
   let boxes = [];
 
   const addBox = () => {
-    boxes = [...boxes, boxInput.value];
+    boxes = [boxInput.value, ...boxes];
   };
 
   const discard = value => {
@@ -62,21 +63,14 @@
 
 {#if showParagraph}
   {#each boxes as box (box)}
-    <!-- <div transition:fade>{box}</div> -->
-    <!-- <div transition:scale>{box}</div> -->
-    <!-- <div transition:slide>{box}</div> -->
-    <!-- <div transition:fly={{ easing: cubicIn }}>{box}</div> -->
-    <!-- <div transition:scale={{ easing: cubicIn, start: 0.5, opacity: 0.5 }}>
-    {box}
-  </div> -->
-    <!-- <div transition:fly={{ easing: cubicIn, x: 0, y: 300 }}>{box}</div> -->
     <div
       transition:fly|local={{ x: 200, y: 0 }}
       on:click={discard.bind(this, box)}
       on:introstart={() => console.log('adding the element starts')}
       on:introend={() => console.log('adding the element end')}
       on:outrostart={() => console.log('remove the element starts')}
-      on:outroend={() => console.log('remove the element end')}>
+      on:outroend={() => console.log('remove the element end')}
+      animate:flip={{ duration: 300 }}>
       {box}
     </div>
   {/each}
